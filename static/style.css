@@ -1,0 +1,16 @@
+.top_area {
+    margin-bottom: 75px;
+    margin-top: 50px;
+    padding: 50px;
+    margin-left: 15%;
+    margin-right: 15%;
+    background-color: #003594;
+    border-radius: 5px;
+}
+.game_text {
+    color: #FFB81C;
+}
+
+.enter_game_area {
+    padding-bottom: 75px;
+}
