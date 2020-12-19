@@ -80,11 +80,63 @@ function getData(targetUrl, callbackFunction) {
     xmlHttp.send();
 }
 
+var fake_son = {}
+function fake_callback() {}
 
 function create_game() {
-
+    console.log('GOING TO CREATE GAME SCREEN');
+    //sendJsonRequest(fake_son, '/create_game', fake_callback)
+    location.href = 'create_game.html';
 }
 
+// Start a game that has been created on the create game screen
+function start_game() {
+    var username = document.getElementById('game_name').value;
+    var game_name = username + "'s Game";
+    var game_json = {
+        "Hostname" : username,
+        "GameName" : game_name
+    }
+    sendJsonRequest(game_json, '/start_game', send_to_game)
+}
+
+var username  = ""
+// Function to send the user to the game screen
+function send_to_game(data) {
+    username = data['hostName']
+    window.location.href = 'main_game.html';
+}
+
+function get_session_data() {
+    sendJsonRequest(fake_son, '/get_session_data', setup_game_screen)
+}
+function setup_game_screen(data) {
+    document.title = data['username'] + "'s Game"
+    document.getElementById('game_name_title').innerText = data['username'] + "'s Game"
+    document.getElementById('game_code_data').innerText = data['game_code']
+    // Check to see if they created the game
+
+    // Else check the database for the game to populate the areas
+
+    // Change page title
+
+    // Change top area of page
+    document.getElementById("game_name_title").text = "TESTING"
+
+    // populate the player area
+
+}
+// Function to populate the player area
+function get_players(game_code) {
+    var json_req = {
+        "game_code" : game_code
+    }
+    sendJsonRequest(json_req, '/populate_players', populate_player_area)
+}
+
+function populate_player_area(player_data) {
+    console.log(player_data);
+}
 function join_game() {
     var game_code = document.getElementById('game_code').value;
     if ((game_code.length == 0)) {

@@ -1,16 +1,60 @@
 .top_area {
-    margin-bottom: 75px;
-    margin-top: 50px;
-    padding: 50px;
+    margin-bottom: 10%;
+    margin-top: 10%;
+    padding: 10%;
     margin-left: 15%;
     margin-right: 15%;
     background-color: #003594;
     border-radius: 5px;
 }
+
 .game_text {
     color: #FFB81C;
 }
 
 .enter_game_area {
     padding-bottom: 75px;
+}
+
+.game_title_div {
+    padding: 50px;
+    background-color: #003594;
+}
+
+.player_title {
+    background-color: black;
+    padding: 10px;
+}
+
+.white_text {
+    color: white;
+}
+
+.player_card {
+    padding: 3%;
+    border-style: solid;
+    border-color: black;
+}
+
+.game_code_area {
+    background-color: #003594;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#current_players {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.game_code_text {
+    margin-top: 25px;
+}
+
+.card {
+    margin-top: 3%;
+    padding-top: 45%;
+    padding-bottom: 45%;
 }
