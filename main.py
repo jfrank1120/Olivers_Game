@@ -84,6 +84,7 @@ def get_new_card():
     log('GENERATING NEW CARD')
     # TODO - PULL A STRING FROM THE TEXT FILE -> UPDATE THE DATABASE WITH IT -> CALL GET CURRENT  CARD
 
+
 @app.route('/get_current_card', methods=["POST"])
 def get_current_card():
     log('GETTING THE CURRENT CARD ')

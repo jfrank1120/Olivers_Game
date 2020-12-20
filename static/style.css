@@ -1,11 +1,14 @@
 .top_area {
-    margin-bottom: 10%;
-    margin-top: 10%;
+    margin-bottom: 20%;
+    margin-top: 25%;
     padding: 10%;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 13%;
+    margin-right: 13%;
     background-color: #003594;
     border-radius: 5px;
+}
+body {
+    background-color: #7D8382;
 }
 
 .game_text {
@@ -13,7 +16,7 @@
 }
 
 .enter_game_area {
-    padding-bottom: 75px;
+    padding-bottom: 25%;
 }
 
 .game_title_div {
@@ -57,4 +60,30 @@
     margin-top: 3%;
     padding-top: 45%;
     padding-bottom: 45%;
+}
+h1 {
+    font-size: 300%
+}
+h2 {
+    font-size: 250%
+}
+.bottom_text {
+    position: absolute;
+    bottom: 5%;
+    left: 36%;
+}
+#website_link_text {
+    font-size: 24pt;
+}
+a:active {
+    color: black;
+    text-decoration: none;
+}
+a:link {
+    text-color: black;
+    text-decoration: none;
+}
+a:hover {
+    text-color: black;
+    text-decoration: none;
 }
