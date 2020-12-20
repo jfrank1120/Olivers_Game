@@ -120,9 +120,6 @@ function setup_game_screen(data) {
 
     // Change page title
 
-    // Change top area of page
-    document.getElementById("game_name_title").text = "TESTING"
-
     // populate the player area
 
 }
@@ -137,6 +134,7 @@ function get_players(game_code) {
 function populate_player_area(player_data) {
     console.log(player_data);
 }
+
 function join_game() {
     var game_code = document.getElementById('game_code').value;
     if ((game_code.length == 0)) {

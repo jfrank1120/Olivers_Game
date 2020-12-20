@@ -2,13 +2,14 @@ from google.cloud import datastore
 from game import Game
 from main import log
 
+GAME_ENTITY = 'Game'
 
 def get_client():
     try:
         client = datastore.Client()
         return client
     except:
-        return datastore.Client.from_service_account_json("API_KEY.json")
+        return datastore.Client.from_service_account_json("oliversgame-c83cab85b0e1.json")
 
 
 def load_key(client, entity_type, entity_id=None, parent_key=None):
@@ -26,6 +27,17 @@ def load_entity(client, entity_type, entity_id, parent_key=None):
     log('Retrieved entity for ' + str(entity_id))
     return entity
 
+# Add a game to the database
+def add_game(game):
+    client = get_client()
+    entity = datastore.Entity(load_key(client, GAME_ENTITY, game.game_code))
+    entity['Game Code'] = game.game_code
+    entity['Number of Players'] = game.num_players
+    entity['Players'] = game.players
+    entity['Host'] = game.hostname
+    log('Placing Game')
+    client.put(entity)
+    log('Saved Game, name' + game.hostname)
 
 # Load the Game from DataStore into an object
 def game_from_entity(game_entity):
