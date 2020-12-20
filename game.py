@@ -3,14 +3,11 @@ import string
 
 
 class Game(object):
-    def __init__(self, hostname, players=None, game_code=None, current_card=None, num_players=None):
+    def __init__(self, hostname, players=[], game_code=None, current_card='', num_players=0):
         self.game_code = game_code
         self.players = players
         self.hostname = hostname
-        if num_players is None:
-            self.num_players = 0
-        else:
-            self.num_players = num_players
+        self.num_players = num_players
         self.current_card = current_card
         if self.game_code is None:
             self.game_code = ""

@@ -1,7 +1,13 @@
 from google.cloud import datastore
 from player import Player
-from main import log
 
+PLAYER_ENTITY = "Player"
+
+
+def log(msg):
+    file_parts = __file__.split("\\")
+    smaller_file = file_parts[len(file_parts) - 1]
+    print(smaller_file + ": " + msg)
 
 def get_client():
     try:
@@ -33,3 +39,26 @@ def player_from_entity(player_entity):
     active = player_entity['Active']
     new_player = Player(username, cards_won, active)
     return new_player
+
+
+# Get the cards won for the player that is passed in
+def get_players_cards(player):
+    username = player.username
+    client = get_client()
+    query = client.query(kind='Player')
+    query.add_filter('Username', '=', username)
+    iterable = list(query.fetch())
+    for x in iterable():
+        new_player = player_from_entity(x)
+        return new_player.cards_won
+
+
+def add_player(player):
+    client = get_client()
+    entity = datastore.Entity(load_key(client, PLAYER_ENTITY, player.username))
+    entity['Username'] = player.username
+    entity['Cards Won'] = player.cards_won
+    entity['Active'] = player.active
+    client.put(entity)
+    log('Just added player ' + player.username)
+

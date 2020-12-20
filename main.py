@@ -2,6 +2,8 @@ from flask import Flask, Response, redirect, session
 import flask
 import json
 from game import Game
+from player import Player
+import playerData
 import gameData
 
 app = flask.Flask(__name__)
@@ -9,7 +11,9 @@ app.secret_key = b'@U\xb0\xadf\x92f\xe8\x10\xee\xdf\x81O\x92\xb7\xe5\xca\x10rE&=
 
 
 def log(msg):
-    print(__file__ + ": " + msg)
+    file_parts = __file__.split("\\")
+    smaller_file = file_parts[len(file_parts) - 1]
+    print(smaller_file + ": " + msg)
 
 
 @app.route('/')
@@ -49,7 +53,7 @@ def start_game():
     # Add game to database
     gameData.add_game(new_game)
     # Add player to game
-    add_player(host_name, game_name)
+    add_player(host_name, new_game)
     # Send to the game screen
     json_result = {
         "hostName": host_name,
@@ -67,14 +71,22 @@ def get_session_data():
     return Response(json.dumps(json_data), mimetype='application/json')
 
 
-def add_player(username, game_name):
-    log('Adding ' + username + " to " + game_name)
+def add_player(username, game):
+    log('Adding ' + username + " to " + game.hostname)
+    new_player = Player(username)
+    playerData.add_player(new_player)
+    gameData.add_player_to_game(username, game.game_code)
 
 
 # Set a new card as the current card for the game
 @app.route('/get_new_card', methods=["POST"])
 def get_new_card():
     log('GENERATING NEW CARD')
+    # TODO - PULL A STRING FROM THE TEXT FILE -> UPDATE THE DATABASE WITH IT -> CALL GET CURRENT  CARD
+
+@app.route('/get_current_card', methods=["POST"])
+def get_current_card():
+    log('GETTING THE CURRENT CARD ')
 
 
 # Get the player names from the database to return to the front-end
@@ -83,12 +95,14 @@ def populate_players():
     game_code = flask.request.form['game_code']
     log('populating players for game_code: ' + game_code)
     players_list = gameData.load_players(game_code)
-    log(players_list)
+    log(str(players_list))
     json_val = {
         'players': players_list
     }
     return Response(json.dumps(json_val), mimetype='application/json')
 
+# TODO - CHECK THAT A PLAYERS NAME DOES NOT ALREADY EXIST IN THE DATABASE
+# TODO - CHECK IF PLAYERS ARE ACTIVE IF NOT REMOVE THEM FROM THE GAME (TIMESTAMP THEIR LAST VOTE?)
 
 # Main Method, Nothing to see here
 if __name__ == '__main__':

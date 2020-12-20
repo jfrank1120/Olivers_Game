@@ -115,13 +115,8 @@ function setup_game_screen(data) {
     document.getElementById('game_name_title').innerText = data['username'] + "'s Game"
     document.getElementById('game_code_data').innerText = data['game_code']
     // Check to see if they created the game
-
-    // Else check the database for the game to populate the areas
-
-    // Change page title
-
     // populate the player area
-
+    get_players(data['game_code']);
 }
 // Function to populate the player area
 function get_players(game_code) {
@@ -133,6 +128,21 @@ function get_players(game_code) {
 
 function populate_player_area(player_data) {
     console.log(player_data);
+    for (var i = 0; i < player_data.players[0].length; i++) {
+        console.log(player_data.players[0][i])
+        var player_name_div = document.createElement("div");
+        player_name_div.className = "player_card";
+        player_name_div.id = player_data.players[0][i] + "_btn";
+        var player_name_text = document.createElement('H5');
+        player_name_text.innerText = player_data.players[0][i];
+        player_name_div.appendChild(player_name_text);
+        document.getElementById('players_div_area').appendChild(player_name_div);
+    }
+    get_current_card();
+}
+
+function get_current_card() {
+    // TODO - MAKE A CALL TO '/GET_CURRENT_CARD' AND THEN SEND TO CALLBACK THAT UPDATES CARD DIV
 }
 
 function join_game() {
@@ -145,3 +155,6 @@ function join_game() {
     console.log(game_code);
 }
 
+// TODO - WRITE FUNCTION FOR CREATING A NEW VOTING ROUND OBJECT
+// TODO - WRITE A FUNCTION TO CONTINUALLY UPDATE THE UI SO THAT PLAYERS SEE VOTES, NEW CARDS, ETC
+// TODO - MAKE MODAL THAT WILL SHOW WHAT CARDS CURRENT PLAYERS HAVE ACCRUED

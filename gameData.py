@@ -41,8 +41,6 @@ def add_game(game):
     client.put(entity)
     log('Saved Game, name' + game.hostname)
 
-# Add Player
-
 
 # Load the Game from DataStore into an object
 def game_from_entity(game_entity):
@@ -68,5 +66,23 @@ def load_players(game_code):
         new_game = game_from_entity(x)
         print(new_game.players)
         return_list.append(new_game.players)
-
     return return_list
+
+
+# Adds a player to the number of players as well as to the current play list
+def add_player_to_game(player, game_code):
+    log('Loading games for game_code' + str(game_code))
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    for x in iterable:
+        log('Found Game with game code')
+        # Alter the fields needed to change
+        num_players = int(x['Number of Players'])
+        players = list(x["Players"])
+        num_players = num_players + 1
+        players.append(player)
+        x['Players'] = players
+        x['Number of Players'] = num_players
+        client.put(x)
