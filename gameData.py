@@ -4,6 +4,7 @@ from main import log
 
 GAME_ENTITY = 'Game'
 
+
 def get_client():
     try:
         client = datastore.Client()
@@ -27,6 +28,7 @@ def load_entity(client, entity_type, entity_id, parent_key=None):
     log('Retrieved entity for ' + str(entity_id))
     return entity
 
+
 # Add a game to the database
 def add_game(game):
     client = get_client()
@@ -38,6 +40,9 @@ def add_game(game):
     log('Placing Game')
     client.put(entity)
     log('Saved Game, name' + game.hostname)
+
+# Add Player
+
 
 # Load the Game from DataStore into an object
 def game_from_entity(game_entity):

@@ -21,8 +21,7 @@ class Game(object):
                     self.game_code = self.game_code + str(randint(1, 9))
             print(self.game_code)
 
-
-    def toDict(self):
+    def to_dict(self):
         return {
             'hostname': self.hostname,
             'players': self.players,
