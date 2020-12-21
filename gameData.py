@@ -71,7 +71,7 @@ def load_players(game_code):
 
 
 # Adds a player to the number of players as well as to the current play list
-def add_player_to_game(player, game_code):
+def add_player_to_game(player_name, game_code):
     log('Loading games for game_code' + str(game_code))
     client = get_client()
     query = client.query(kind='Game')
@@ -83,7 +83,19 @@ def add_player_to_game(player, game_code):
         num_players = int(x['Number of Players'])
         players = list(x["Players"])
         num_players = num_players + 1
-        players.append(player)
+        players.append(player_name)
         x['Players'] = players
         x['Number of Players'] = num_players
         client.put(x)
+
+
+# Checks to see if a game is in the Database
+def check_for_game(game_code):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    if len(iterable) != 0:
+        return True
+    return False
+

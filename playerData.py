@@ -53,6 +53,7 @@ def get_players_cards(player):
         return new_player.cards_won
 
 
+# Add a player to the database
 def add_player(player):
     client = get_client()
     entity = datastore.Entity(load_key(client, PLAYER_ENTITY, player.username))
@@ -62,3 +63,13 @@ def add_player(player):
     client.put(entity)
     log('Just added player ' + player.username)
 
+
+# Check to see if a player is in the Database
+def check_for_player(player_name):
+    client = get_client()
+    query = client.query(kind='Player')
+    query.add_filter('Username', '=', player_name)
+    iterable = list(query.fetch())
+    if len(iterable) != 0:
+        return False
+    return True

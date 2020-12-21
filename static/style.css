@@ -57,10 +57,13 @@ body {
     margin-top: 25px;
 }
 
-.card {
+.card_r {
     margin-top: 3%;
     padding-top: 45%;
     padding-bottom: 45%;
+    background-color: #fff; */
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
 }
 h1 {
     font-size: 300%

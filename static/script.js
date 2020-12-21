@@ -104,7 +104,7 @@ var username  = ""
 // Function to send the user to the game screen
 function send_to_game(data) {
     username = data['hostName']
-    window.location.href = 'main_game.html';
+    location.href = 'main_game.html';
 }
 
 function get_session_data() {
@@ -168,10 +168,11 @@ function join_game() {
 
 // Callback for after a player has attempted to join a game
 function finished_join(data) {
+    console.log(data)
     if (data['Success'] == "True") {
+        console.log('Successfully found game and entered user')
 
-
-        window.location.href('main_game.html');
+        location.href = 'main_game.html';
     } else {
         if (data['Error'] == 'Username Already Taken') {
             alert('Username has already been taken, please select another');
