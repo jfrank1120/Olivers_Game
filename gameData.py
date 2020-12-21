@@ -37,6 +37,7 @@ def add_game(game):
     entity['Number of Players'] = game.num_players
     entity['Players'] = game.players
     entity['Host'] = game.hostname
+    entity['Current Card'] = game.current_card
     log('Placing Game')
     client.put(entity)
     log('Saved Game, name' + game.hostname)

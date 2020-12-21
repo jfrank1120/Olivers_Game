@@ -153,6 +153,32 @@ function join_game() {
     }
     // Send the code to the backend
     console.log(game_code);
+    var username = prompt("Please Enter a Username");
+    if ((username.length == 0)) {
+        console.log('NO CODE ENTERED');
+        alert('Username is not valid, please retry')
+        return;
+    }
+    var join_data = {
+        'username': username,
+        'game_code': game_code
+    }
+    sendJsonRequest(join_data, '/user_join_attempt', finished_join)
+}
+
+// Callback for after a player has attempted to join a game
+function finished_join(data) {
+    if (data['Success'] == "True") {
+
+
+        window.location.href('main_game.html');
+    } else {
+        if (data['Error'] == 'Username Already Taken') {
+            alert('Username has already been taken, please select another');
+        } else if (data['Error'] == 'Game Does Not Exist') {
+            alert('There is no active game matching your code, please try again');
+        }
+    }
 }
 
 // TODO - WRITE FUNCTION FOR CREATING A NEW VOTING ROUND OBJECT

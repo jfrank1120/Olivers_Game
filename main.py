@@ -36,9 +36,18 @@ def user_join_attempt():
     game_code = flask.request.form['game_code']
     log('Player Attempting to join game: ' + str(game_code))
     # Access the Database to see if a game with that code exists
+    # TODO - Database query to confirm game exists -> create player object -> add player to game
 
     # If successful add it to the game_code session value
     session['game_code'] = game_code
+
+    # Create json to return to JS
+    json_val = {
+        "Success": "True",
+        "Error": ""
+    }
+    return Response(json.dumps(json_val), mimetype='application/json')
+
 
 @app.route('/start_game', methods=["POST"])
 def start_game():
