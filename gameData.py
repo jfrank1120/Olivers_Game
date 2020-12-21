@@ -1,8 +1,13 @@
 from google.cloud import datastore
 from game import Game
-from main import log
 
 GAME_ENTITY = 'Game'
+
+
+def log(msg):
+    file_parts = __file__.split("\\")
+    smaller_file = file_parts[len(file_parts) - 1]
+    print(smaller_file + ": " + msg)
 
 
 def get_client():
@@ -99,3 +104,10 @@ def check_for_game(game_code):
         return True
     return False
 
+
+def get_current_card(game_code):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    game = query.fetch()
+    return game['Current Card']

@@ -16,7 +16,6 @@ class Game(object):
                     self.game_code = self.game_code + choice(string.ascii_letters)
                 else:
                     self.game_code = self.game_code + str(randint(1, 9))
-            print(self.game_code)
 
     def to_dict(self):
         return {

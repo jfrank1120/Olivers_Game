@@ -127,7 +127,6 @@ function get_players(game_code) {
 }
 
 function populate_player_area(player_data) {
-    console.log(player_data);
     for (var i = 0; i < player_data.players[0].length; i++) {
         console.log(player_data.players[0][i])
         var player_name_div = document.createElement("div");
@@ -141,8 +140,25 @@ function populate_player_area(player_data) {
     get_current_card();
 }
 
-function get_current_card() {
+function get_current_card(game_code) {
     // TODO - MAKE A CALL TO '/GET_CURRENT_CARD' AND THEN SEND TO CALLBACK THAT UPDATES CARD DIV
+    var json_data = {
+        'game_code': game_code
+    }
+    sendJsonRequest(json_data, '/get_current_card', update_card);
+}
+
+function update_card(card_data) {
+    document.getElementById('card_data').innterText = card_data['current_card'];
+}
+
+// Function that will update all UI elements that need to continually be updated
+function update_UI() {
+    sendJsonRequest(fake_son, '/get_UI_info', update_UI_callback)
+}
+
+function update_UI_callback(session_data) {
+
 }
 
 function join_game() {

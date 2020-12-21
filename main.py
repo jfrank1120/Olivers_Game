@@ -111,6 +111,24 @@ def get_new_card():
 @app.route('/get_current_card', methods=["POST"])
 def get_current_card():
     log('GETTING THE CURRENT CARD ')
+    game_code = flask.request.form['game_code']
+    curr_card = gameData.get_current_card(game_code)
+    json_data = {
+        "current_card": curr_card
+    }
+    return Response(json.dumps(json_data), mimetype='application/json')
+
+
+@app.route('/get_UI_info', methods=['POST'])
+def get_UI_info():
+    players_list = gameData.load_players(session['game_code'])
+    current_card = gameData.get_current_card(session['game_code'])
+    ui_info = {
+        'username': session['username'],
+        'game_code': session['game_code'],
+        'players': players_list,
+        'current_card': current_card
+    }
 
 
 # Get the player names from the database to return to the front-end
@@ -125,8 +143,8 @@ def populate_players():
     }
     return Response(json.dumps(json_val), mimetype='application/json')
 
-# TODO - CHECK THAT A PLAYERS NAME DOES NOT ALREADY EXIST IN THE DATABASE
 # TODO - CHECK IF PLAYERS ARE ACTIVE IF NOT REMOVE THEM FROM THE GAME (TIMESTAMP THEIR LAST VOTE?)
+
 
 # Main Method, Nothing to see here
 if __name__ == '__main__':
