@@ -6,8 +6,12 @@
 ## WEBSITE
 https://oliversgame.uc.r.appspot.com/static/index.html
 
-### Current Status
-- Can create game
-- Can create player
-- Working on casting votes
-- Attempting to populate card area
+### Current Status of Features
+- [x] Create Game
+- [x] Create Player
+- [ ] Cast Vote
+- [ ] Show new card
+- [ ] Alert Card Winner
+- [ ] Custom Card Submission
+- [ ] Unit Testing
+- [ ] Bug Testing
