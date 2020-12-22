@@ -1,15 +1,23 @@
+# Basic import statements
 from flask import Flask, Response, redirect, session
 import flask
 import json
+from random import randint
+
+# Other files/functions to import
 from game import Game
 from player import Player
+from votingRound import VotingRound
 import playerData
 import gameData
+import votingRoundData
 
+# Needed for flask actions
 app = flask.Flask(__name__)
 app.secret_key = b'@U\xb0\xadf\x92f\xe8\x10\xee\xdf\x81O\x92\xb7\xe5\xca\x10rE&=\xd0\x7f'
 
 
+# Simple logging function for server output
 def log(msg):
     file_parts = __file__.split("\\")
     smaller_file = file_parts[len(file_parts) - 1]
@@ -106,6 +114,31 @@ def add_player(username, game):
 def get_new_card():
     log('GENERATING NEW CARD')
     # TODO - PULL A STRING FROM THE TEXT FILE -> UPDATE THE DATABASE WITH IT -> CALL GET CURRENT  CARD
+    card_data = open('Card_Data.txt', 'r')
+    card_strings = card_data.readLines()
+    index = randint(0, len(card_strings))
+    selected_card = card_strings[index]
+    log('selected card: ' + selected_card)
+
+    # All the database actions
+    gameData.add_card_to_used(session['game_code'], index)
+    new_voting_round = VotingRound(session['game_code'], selected_card)
+    votingRoundData.add_voting_round(new_voting_round)
+    json_resp = {
+        'card_data': selected_card
+    }
+    return Response(json.dumps(json_resp), mimetype='application/json')
+
+
+# End point for when the user clicks submit vote
+@app.route('/cast_vote', methods=['POST'])
+def cast_vote():
+    vote_choice = flask.request.form['choice']
+    log(session['username'] + ' is casting a vote for ' + vote_choice)
+    # Add data to voting round
+    votingRoundData.cast_vote(session['game_code'], vote_choice)
+    # Update their last time voting on their player entity
+    playerData.update_last_vote(session['username'])
 
 
 @app.route('/get_current_card', methods=["POST"])
@@ -129,6 +162,7 @@ def get_UI_info():
         'players': players_list,
         'current_card': current_card
     }
+    # TODO - FINISH THIS METHOD LOL
 
 
 # Get the player names from the database to return to the front-end

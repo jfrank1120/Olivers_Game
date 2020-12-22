@@ -43,6 +43,7 @@ def add_game(game):
     entity['Players'] = game.players
     entity['Host'] = game.hostname
     entity['Current Card'] = game.current_card
+    entity['Cards Used'] = game.cards_used
     log('Placing Game')
     client.put(entity)
     log('Saved Game, name' + game.hostname)
@@ -111,3 +112,29 @@ def get_current_card(game_code):
     query.add_filter('Game Code', '=', game_code)
     game = query.fetch()
     return game['Current Card']
+
+
+# Add a card index to the cards used list in the game entity
+def add_card_to_used(game_code, card_index):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    for x in iterable:
+        cards_used = list(x["Cards Used"])
+        cards_used.append(card_index)
+        x['Cards Used'] = cards_used
+        client.put(x)
+
+
+def get_game_object(game_code):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    log('Num Games: ' + str(len(iterable)))
+    for x in iterable:
+        new_game = game_from_entity(x)
+        return new_game
+    log('No game found for ' + game_code)
+    return None

@@ -1,5 +1,7 @@
 from google.cloud import datastore
 from player import Player
+from datetime import datetime, timezone
+import rfc3339
 
 PLAYER_ENTITY = "Player"
 
@@ -73,3 +75,14 @@ def check_for_player(player_name):
     if len(iterable) != 0:
         return False
     return True
+
+
+def update_last_vote(player_name):
+    client = get_client()
+    query = client.query(kind='Player')
+    query.add_filter('Username', '=', player_name)
+    iterable = list(query.fetch())
+    for x in iterable:
+        local_time = datetime.now(timezone.utc).isoformat()
+        log('Voting Time was: ' + local_time)
+        x['Last Vote'] = local_time
