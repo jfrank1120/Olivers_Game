@@ -45,7 +45,6 @@ def user_join_attempt():
     username = flask.request.form['username']
     log('Player Attempting to join game: ' + str(game_code))
     # Access the Database to see if a game with that code exists
-    # TODO - Database query to confirm game exists -> create player object -> add player to game
     error_msg = ""
     if gameData.check_for_game(game_code) is not True:
         success_val = "False"
@@ -113,7 +112,6 @@ def add_player(username, game):
 @app.route('/get_new_card', methods=["POST"])
 def get_new_card():
     log('GENERATING NEW CARD')
-    # TODO - PULL A STRING FROM THE TEXT FILE -> UPDATE THE DATABASE WITH IT -> CALL GET CURRENT  CARD
     with open('Card_Data.txt', 'r') as card_data:
         card_strings = card_data.read().splitlines()
     index = randint(0, len(card_strings))

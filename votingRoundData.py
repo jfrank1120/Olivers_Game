@@ -100,5 +100,4 @@ def get_num_players(voting_round):
     for x in iterable:
         new_game = game_from_entity(x)
         return new_game.num_players
-
-    # TODO - FIGURE OUT HOW TO MAKE IT SO EACH PLAYER CAN ONLY VOTE ONCE
+# TODO - FIGURE OUT HOW TO MAKE IT SO EACH PLAYER CAN ONLY VOTE ONCE

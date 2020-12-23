@@ -3,7 +3,7 @@ import string
 
 
 class Game(object):
-    def __init__(self, hostname, players=[], game_code=None, current_card='', num_players=0, cards_used=[]):
+    def __init__(self, hostname, players=[], game_code=None, current_card='PRESS GET NEW CARD TO BEGIN', num_players=0, cards_used=[]):
         self.game_code = game_code
         self.players = players
         self.hostname = hostname
