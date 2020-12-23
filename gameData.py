@@ -115,6 +115,16 @@ def get_current_card(game_code):
         return x['Current Card']
 
 
+def set_current_card(game_code, card_str):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    games = list(query.fetch())
+    for x in games:
+        x['Current Card'] = card_str
+        client.put(x)
+
+
 # Add a card index to the cards used list in the game entity
 def add_card_to_used(game_code, card_index):
     client = get_client()

@@ -43,13 +43,13 @@ def player_from_entity(player_entity):
 
 
 # Get the cards won for the player that is passed in
-def get_players_cards(player):
-    username = player.username
+def get_players_cards(player_username):
+    username = player_username
     client = get_client()
     query = client.query(kind='Player')
     query.add_filter('Username', '=', username)
     iterable = list(query.fetch())
-    for x in iterable():
+    for x in iterable:
         new_player = player_from_entity(x)
         return new_player.cards_won
 

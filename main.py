@@ -94,9 +94,11 @@ def start_game():
 
 @app.route('/get_session_data', methods=["POST"])
 def get_session_data():
+    game = gameData.get_game_object(session['game_code'])
     json_data = {
         'username': session['username'],
-        'game_code': session['game_code']
+        'game_code': session['game_code'],
+        'host_name': game.hostname
     }
     return Response(json.dumps(json_data), mimetype='application/json')
 
@@ -114,12 +116,13 @@ def get_new_card():
     log('GENERATING NEW CARD')
     with open('Card_Data.txt', 'r') as card_data:
         card_strings = card_data.read().splitlines()
-    index = randint(0, len(card_strings))
+    index = randint(0, len(card_strings) - 1)
     selected_card = card_strings[index]
     log('selected card: ' + selected_card)
 
     # All the database actions
     gameData.add_card_to_used(session['game_code'], index)
+    gameData.set_current_card(session['game_code'], selected_card)
     new_voting_round = VotingRound(session['game_code'], selected_card)
     new_voting_round.num_votes_needed = votingRoundData.get_num_players(new_voting_round)
     votingRoundData.add_voting_round(new_voting_round)
@@ -156,7 +159,7 @@ def get_current_card():
 
 
 @app.route('/get_UI_info', methods=['POST'])
-def get_UI_info():
+def get_ui_info():
     players_list = gameData.load_players(session['game_code'])
     current_card = gameData.get_current_card(session['game_code'])
     ui_info = {
@@ -165,7 +168,7 @@ def get_UI_info():
         'players': players_list,
         'current_card': current_card
     }
-    # TODO - FINISH THIS METHOD LOL
+    return Response(json.dumps(ui_info), mimetype='application/json')
 
 
 # Get the player names from the database to return to the front-end
@@ -180,7 +183,22 @@ def populate_players():
     }
     return Response(json.dumps(json_val), mimetype='application/json')
 
+
+@app.route('/get_players_cards', methods=['POST'])
+def get_players_cards():
+    player_name = flask.request.form['player_name']
+    cards_list = playerData.get_players_cards(player_name)
+    json_ret = {
+        'cards_won': cards_list,
+        'selected_player': player_name
+    }
+    return Response(json.dumps(json_ret), mimetype='application/json')
+
+# TODO - TALLY VOTES FUNCTION
+# TODO - CHECK THAT TIMESTAMP FUNCTION WORKS WHEN A USER CASTS A VOTE
 # TODO - CHECK IF PLAYERS ARE ACTIVE IF NOT REMOVE THEM FROM THE GAME (TIMESTAMP THEIR LAST VOTE?)
+# TODO - FIGURE OUT WAY TO ALERT USER WHO HAS WON THE CARD THAT THEY DID WIN (MODAL?)
+# TODO - BEGIN DOING UNIT TESTING / UI TESTING
 
 
 # Main Method, Nothing to see here

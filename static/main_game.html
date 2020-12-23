@@ -18,7 +18,7 @@
             </div>
             <div class="game_code_area col-4">
                 <h3 class="white_text game_code_text"> Game Code: </h3>
-                <h3 class="white_text" id="game_code_data"> TEST</h3>
+                <h3 class="white_text" id="game_code_data"></h3>
             </div>
         </div>
         <div class="row">
@@ -30,8 +30,6 @@
                     <div class="dropdown col dropdown_item">
                       <a id="selected_choice" class="dropdown-toggle" data-toggle="dropdown" href="#">None</a>
                       <ul id="dropdown_choices" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li class="player_choice" onclick="set_vote('asds')">asds</li>
-                        <li class="divider"></li>
                       </ul>
                     </div>
                     <div class="col">
@@ -40,7 +38,7 @@
                 </div>
                 <div id="card_area">
                     <div class="card_r card_info">
-                        <h2 id="card_data"> CARD WORDS THAT WILL BE PLACED HERE SO THAT YOU CAN READ THEM</h2>
+                        <h2 id="card_data"></h2>
                     </div>
                 </div>
                 <div class="row">
@@ -59,6 +57,25 @@
                 <div id="players_div_area" class="players_div">
                 </div>
             </div>
+        </div>
+
+        <!-- MODAL FOR VIEWING PLAYER CARDS -->
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                  <center>
+                      <h4 id="modal_player_name" class="modal-title"></h4>
+                  </center>
+              </div>
+              <div id="modal_area" class="modal-body">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
     </center>
 </body>

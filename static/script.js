@@ -112,7 +112,7 @@ function get_session_data() {
 }
 function setup_game_screen(data) {
     document.title = data['username'] + "'s Game"
-    document.getElementById('game_name_title').innerText = data['username'] + "'s Game"
+    document.getElementById('game_name_title').innerText = data['host_name'] + "'s Game"
     document.getElementById('game_code_data').innerText = data['game_code']
     // Check to see if they created the game
     // populate the player area
@@ -127,26 +127,34 @@ function get_players(game_code) {
 }
 
 function populate_player_area(player_data) {
-    for (var i = 0; i < player_data.players[0].length; i++) {
+    populate_player_area_loop(player_data.players[0]);
+    get_current_card();
+}
+function populate_player_area_loop(player_list) {
+    for (var i = 0; i < player_list.length; i++) {
+        // Populate the player list in the right column
         var player_name_div = document.createElement("div");
         player_name_div.className = "player_card";
-        player_name_div.id = player_data.players[0][i] + "_btn";
+        player_name_div.id = player_list[i] + "_btn";
+        player_name_div.setAttribute('onclick', "view_cards('" + player_list[i] + "')")
+        //player_name_div.setAttribute('data-toggle', "modal")
+        //player_name_div.setAttribute('data-target', "#myModal")
         var player_name_text = document.createElement('H5');
-        player_name_text.innerText = player_data.players[0][i];
+        player_name_text.innerText = player_list[i];
         player_name_div.appendChild(player_name_text);
         document.getElementById('players_div_area').appendChild(player_name_div);
+
         // Populate the dropdown
         var divider = document.createElement('li');
         divider.className = 'divider';
         var dropdown_selection = document.createElement("li");
-        dropdown_selection.setAttribute("onclick", "set_vote('" + player_data.players[0][i] + "')");
+        dropdown_selection.setAttribute("onclick", "set_vote('" + player_list[i] + "')");
         dropdown_selection.className = "player_choice";
-        dropdown_selection.innerText = player_data.players[0][i];
+        dropdown_selection.innerText = player_list[i];
         var dropdown_selection_div = document.getElementById('dropdown_choices');
         dropdown_selection_div.appendChild(dropdown_selection);
         dropdown_selection_div.appendChild(divider);
     }
-    get_current_card();
 }
 
 function get_new_card() {
@@ -170,7 +178,10 @@ function update_UI() {
 }
 
 function update_UI_callback(session_data) {
-
+    // Update the current card
+    update_card(session_data['current_card']);
+    // Update the number of players
+    populate_player_area_loop(session_data['players']);
 }
 
 function join_game() {
@@ -226,9 +237,32 @@ function set_vote(vote_username) {
     document.getElementById('selected_choice').innerText = vote_username;
 }
 
+function view_cards(player_name) {
+    console.log('Attempting to view cards for player: ' + player_name);
+    var json_req = {
+        'player_name': player_name
+    }
+    sendJsonRequest(json_req, '/get_players_cards', view_player_cards)
+}
+
+function view_player_cards(data) {
+    cards_list = data['cards_won'];
+    player_name = data['selected_player']
+    console.log(player_name)
+    $('#modal_player_name').text(player_name + "'s Cards Won");
+    if (cards_list.length != 0) {
+        for(var i = 0; i < cards_list.length; i++) {
+            $('#modal_area').append("<h4>" + cards_list[i] +"</h4>")
+        }
+    } else {
+        $('#modal_area').append("<h4> None :( </h4>")
+    }
+    $('#myModal').modal('show');
+    //update_UI();
+}
+
 function tally_votes() {
     console.log('tallying the votes');
-    // TODO - Call end point that will tally votes and alert a winner
+    // TODO - CALL ENDPOINT THAT WILL TALLY VOTES -> ALERT THE WINNER?
 }
 // TODO - WRITE A FUNCTION TO CONTINUALLY UPDATE THE UI SO THAT PLAYERS SEE VOTES, NEW CARDS, ETC
-// TODO - MAKE MODAL THAT WILL SHOW WHAT CARDS CURRENT PLAYERS HAVE ACCRUED
