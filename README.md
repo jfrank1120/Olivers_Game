@@ -9,8 +9,8 @@ https://oliversgame.uc.r.appspot.com/static/index.html
 ### Current Status of Features
 - [x] Create Game
 - [x] Create Player
-- [ ] Cast Vote
-- [ ] Show new card
+- [x] Cast Vote
+- [x] Show new card
 - [ ] Alert Card Winner
 - [ ] Custom Card Submission
 - [ ] Unit Testing
