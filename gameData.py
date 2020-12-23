@@ -110,8 +110,9 @@ def get_current_card(game_code):
     client = get_client()
     query = client.query(kind='Game')
     query.add_filter('Game Code', '=', game_code)
-    game = query.fetch()
-    return game['Current Card']
+    games = list(query.fetch())
+    for x in games:
+        return x['Current Card']
 
 
 # Add a card index to the cards used list in the game entity

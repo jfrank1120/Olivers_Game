@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link href="style.css" type="text/css" rel="stylesheet"/>
     <script src="script.js"></script>
     <meta charset="UTF-8">
@@ -22,21 +23,32 @@
         </div>
         <div class="row">
             <div class="col-8">
-                <div class="voting_area">
-                   <div class="voting_text">
-                        <h3> Cast Your vote: </h3>
+                <div class="voting_area row">
+                   <div class="voting_text col">
+                        <h3 class="white_text"> Cast vote: </h3>
                     </div>
-                    <div class="dropdown">
-                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">None</a>
-                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <li><a href="#">asds</a></li>
+                    <div class="dropdown col dropdown_item">
+                      <a id="selected_choice" class="dropdown-toggle" data-toggle="dropdown" href="#">None</a>
+                      <ul id="dropdown_choices" class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li class="player_choice" onclick="set_vote('asds')">asds</li>
                         <li class="divider"></li>
                       </ul>
+                    </div>
+                    <div class="col">
+                        <button onclick="cast_vote()" class="vote_btn btn btn-md"> Vote </button>
                     </div>
                 </div>
                 <div id="card_area">
                     <div class="card_r card_info">
                         <h2 id="card_data"> CARD WORDS THAT WILL BE PLACED HERE SO THAT YOU CAN READ THEM</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button onclick="get_new_card()" class="new_card_btn btn btn-md"> Get New Card </button>
+                    </div>
+                    <div class="col">
+                        <button onclick="tally_votes()" class="new_card_btn btn btn-md">Tally Votes </button>
                     </div>
                 </div>
             </div>

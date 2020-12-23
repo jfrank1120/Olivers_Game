@@ -128,7 +128,6 @@ function get_players(game_code) {
 
 function populate_player_area(player_data) {
     for (var i = 0; i < player_data.players[0].length; i++) {
-        console.log(player_data.players[0][i])
         var player_name_div = document.createElement("div");
         player_name_div.className = "player_card";
         player_name_div.id = player_data.players[0][i] + "_btn";
@@ -136,12 +135,25 @@ function populate_player_area(player_data) {
         player_name_text.innerText = player_data.players[0][i];
         player_name_div.appendChild(player_name_text);
         document.getElementById('players_div_area').appendChild(player_name_div);
+        // Populate the dropdown
+        var divider = document.createElement('li');
+        divider.className = 'divider';
+        var dropdown_selection = document.createElement("li");
+        dropdown_selection.setAttribute("onclick", "set_vote('" + player_data.players[0][i] + "')");
+        dropdown_selection.className = "player_choice";
+        dropdown_selection.innerText = player_data.players[0][i];
+        var dropdown_selection_div = document.getElementById('dropdown_choices');
+        dropdown_selection_div.appendChild(dropdown_selection);
+        dropdown_selection_div.appendChild(divider);
     }
     get_current_card();
 }
 
+function get_new_card() {
+    sendJsonRequest(fake_son, '/get_new_card', update_card);
+}
+
 function get_current_card(game_code) {
-    // TODO - MAKE A CALL TO '/GET_CURRENT_CARD' AND THEN SEND TO CALLBACK THAT UPDATES CARD DIV
     var json_data = {
         'game_code': game_code
     }
@@ -149,7 +161,7 @@ function get_current_card(game_code) {
 }
 
 function update_card(card_data) {
-    document.getElementById('card_data').innterText = card_data['current_card'];
+    document.getElementById('card_data').innerText = card_data['current_card'];
 }
 
 // Function that will update all UI elements that need to continually be updated
@@ -198,8 +210,25 @@ function finished_join(data) {
     }
 }
 
-// TODO - WRITE FUNCTION FOR CREATING A NEW VOTING ROUND OBJECT
+function cast_vote() {
+    // Get the text from the dropdown to submit as the vote
+    vote = document.getElementById('selected_choice').innerText;
+    console.log('User voted for: ' + vote);
+    var json_sent = {
+        "choice": vote
+    }
+    sendJsonRequest(json_sent, '/cast_vote', update_UI)
+}
+
+function set_vote(vote_username) {
+    // Change the dropdown text to be their current vote
+    console.log(vote_username);
+    document.getElementById('selected_choice').innerText = vote_username;
+}
+
+function tally_votes() {
+    console.log('tallying the votes');
+    // TODO - Call end point that will tally votes and alert a winner
+}
 // TODO - WRITE A FUNCTION TO CONTINUALLY UPDATE THE UI SO THAT PLAYERS SEE VOTES, NEW CARDS, ETC
 // TODO - MAKE MODAL THAT WILL SHOW WHAT CARDS CURRENT PLAYERS HAVE ACCRUED
-// TODO - CREATE JS FUNCTIONS FOR CASTING A VOTE
-// TODO - CREATE JS FUNCTIONS FOR GETTING A NEW CARD (SKIP FUNCTIONALITY LATER)

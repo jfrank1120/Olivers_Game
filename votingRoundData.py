@@ -52,21 +52,10 @@ def add_voting_round(voting_round):
     entity['Game Code'] = voting_round.game_code
     entity['Number of Votes Needed'] = voting_round.num_votes_needed
     entity['Card Info'] = voting_round.card_data
+    entity['Votes'] = []
     log('Placing Voting Round')
     client.put(entity)
     log('Created Round for: ' + voting_round.card_data)
-
-
-# Get the number of players that are currently in the game
-def get_num_players(voting_round):
-    log('Loading players for game_code' + str(voting_round.game_code))
-    client = get_client()
-    query = client.query(kind='Game')
-    query.add_filter('Game Code', '=', voting_round.game_code)
-    iterable = list(query.fetch())
-    for x in iterable:
-        new_game = game_from_entity(x)
-        return new_game.num_players
 
 
 # Searches for the voting round matching the passed in game code and then returns the object
@@ -86,16 +75,30 @@ def get_curr_voting_round_entity(game_code):
     query = client.query(kind='Voting Round')
     query.add_filter('Game Code', '=', game_code)
     log('Searching for voting rounds with game code: ' + game_code)
-    voting_round_entity = query.fetch()
-    return voting_round_entity
+    voting_round_entities = list(query.fetch())
+    for x in voting_round_entities:
+        return x
 
 
 # Cast a vote to the current voting round
 def cast_vote(game_code, vote_str):
+    client = get_client()
     voting_entity = get_curr_voting_round_entity(game_code)
     votes = list(voting_entity["Votes"])
     votes.append(vote_str)
     voting_entity['Votes'] = votes
-    client.put(x)
+    client.put(voting_entity)
+
+
+# Get the number of players that are currently in the game
+def get_num_players(voting_round):
+    log('Loading players for game_code' + str(voting_round.game_code))
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', voting_round.game_code)
+    iterable = list(query.fetch())
+    for x in iterable:
+        new_game = game_from_entity(x)
+        return new_game.num_players
 
     # TODO - FIGURE OUT HOW TO MAKE IT SO EACH PLAYER CAN ONLY VOTE ONCE

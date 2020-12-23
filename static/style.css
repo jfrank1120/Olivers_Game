@@ -96,4 +96,30 @@ a:hover {
 }
 .voting_area {
     padding-top: .75%;
+    background-color: black;
+    padding-bottom: 2.75%;
+}
+
+.vote_btn {
+    margin-top: 1%;
+    font-weight: bold;
+    background-color: #FFB81C;
+    padding-left: 35%;
+    padding-right: 35%;
+}
+
+.dropdown_item {
+    margin-top: 1.75%;
+    background-color: white;
+}
+
+.player_choice {
+    font-size: 16pt;
+}
+
+.new_card_btn {
+    background-color: #FFB81C;
+    padding: 6%;
+    margin-top: 2%;
+    font-weight: bold;
 }

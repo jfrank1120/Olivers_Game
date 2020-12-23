@@ -114,8 +114,8 @@ def add_player(username, game):
 def get_new_card():
     log('GENERATING NEW CARD')
     # TODO - PULL A STRING FROM THE TEXT FILE -> UPDATE THE DATABASE WITH IT -> CALL GET CURRENT  CARD
-    card_data = open('Card_Data.txt', 'r')
-    card_strings = card_data.readLines()
+    with open('Card_Data.txt', 'r') as card_data:
+        card_strings = card_data.read().splitlines()
     index = randint(0, len(card_strings))
     selected_card = card_strings[index]
     log('selected card: ' + selected_card)
@@ -123,9 +123,10 @@ def get_new_card():
     # All the database actions
     gameData.add_card_to_used(session['game_code'], index)
     new_voting_round = VotingRound(session['game_code'], selected_card)
+    new_voting_round.num_votes_needed = votingRoundData.get_num_players(new_voting_round)
     votingRoundData.add_voting_round(new_voting_round)
     json_resp = {
-        'card_data': selected_card
+        'current_card': selected_card
     }
     return Response(json.dumps(json_resp), mimetype='application/json')
 
@@ -139,6 +140,10 @@ def cast_vote():
     votingRoundData.cast_vote(session['game_code'], vote_choice)
     # Update their last time voting on their player entity
     playerData.update_last_vote(session['username'])
+    json_resp = {
+        'Vote Response': 'Success'
+    }
+    return Response(json.dumps(json_resp), mimetype='application/json')
 
 
 @app.route('/get_current_card', methods=["POST"])

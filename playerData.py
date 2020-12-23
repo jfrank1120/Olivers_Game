@@ -1,7 +1,6 @@
 from google.cloud import datastore
 from player import Player
 from datetime import datetime, timezone
-import rfc3339
 
 PLAYER_ENTITY = "Player"
 
