@@ -57,6 +57,7 @@ def user_join_attempt():
         # If successful add it to the game_code session value
         log('Passed Checks')
         session['game_code'] = game_code
+        session['username'] = username
         success_val = "True"
         new_player = Player(username, [], True)
         playerData.add_player(new_player)
