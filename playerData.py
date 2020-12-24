@@ -85,3 +85,21 @@ def update_last_vote(player_name):
         local_time = datetime.now(timezone.utc).isoformat()
         log('Voting Time was: ' + local_time)
         x['Last Vote'] = local_time
+
+
+def get_player_obj(username):
+    client = get_client()
+    query = client.query(kind='Player')
+    query.add_filter('Username', '=', username)
+    iterable = list(query.fetch())
+    for x in iterable:
+        return player_from_entity(x)
+
+
+def update_won_cards(player_obj):
+    client = get_client()
+    query = client.query(kind='Player')
+    query.add_filter('Username', '=', player_obj.username)
+    iterable = list(query.fetch())
+    for x in iterable:
+        x['Cards Won'] = player_obj.cards_won

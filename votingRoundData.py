@@ -101,3 +101,13 @@ def get_num_players(voting_round):
         new_game = game_from_entity(x)
         return new_game.num_players
 # TODO - FIGURE OUT HOW TO MAKE IT SO EACH PLAYER CAN ONLY VOTE ONCE
+
+
+def remove_voting_round(game_code):
+    client = get_client()
+    query = client.query(kind='Voting Round')
+    query.add_filter('Game Code', '=', game_code)
+    log('Searching for voting rounds with game code: ' + game_code)
+    voting_round_entities = list(query.fetch())
+    for x in voting_round_entities:
+        x.key.delete()

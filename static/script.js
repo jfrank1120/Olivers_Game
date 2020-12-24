@@ -264,5 +264,14 @@ function view_player_cards(data) {
 function tally_votes() {
     console.log('tallying the votes');
     // TODO - CALL ENDPOINT THAT WILL TALLY VOTES -> ALERT THE WINNER?
+    sendJsonRequest(fake_son, '/count_votes', show_winner)
+}
+
+function show_winner(data) {
+    console.log(data);
+    // Function to show the winner modal
+     $('#modal_tinner').text(player_name + " Won!");
+     $('#modal_data').append("<h4> TAKE " + data['num_sips'] +" SIP(S)!! </h4>")
+     $('#winnerModal').modal('show');
 }
 // TODO - WRITE A FUNCTION TO CONTINUALLY UPDATE THE UI SO THAT PLAYERS SEE VOTES, NEW CARDS, ETC

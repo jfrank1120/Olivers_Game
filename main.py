@@ -166,7 +166,7 @@ def get_ui_info():
         'username': session['username'],
         'game_code': session['game_code'],
         'players': players_list,
-        'current_card': current_card
+        'current_card': current_card,
     }
     return Response(json.dumps(ui_info), mimetype='application/json')
 
@@ -194,7 +194,33 @@ def get_players_cards():
     }
     return Response(json.dumps(json_ret), mimetype='application/json')
 
-# TODO - TALLY VOTES FUNCTION
+
+@app.route('/count_votes', methods=['POST'])
+def count_votes():
+    # TODO - THINK OF A WAY TO GET ALL PLAYERS TO VIEW THE WINNER MODAL WHEN VOTES ARE TALLIED
+    voting_round_obj = votingRoundData.get_current_voting_round_obj(session['game_code'])
+    highest_votes = 0
+    current_leader = None
+    for x in voting_round_obj.votes:
+        if voting_round_obj.votes.count(x) > highest_votes:
+            highest_votes = voting_round_obj.count(x)
+            current_leader = str(x)
+    num_sips = randint(0, 5)
+    json_ret = {
+        "winner": current_leader,
+        "num_votes": highest_votes,
+        "num_sips": num_sips
+    }
+    votingRoundData.remove_voting_round('game_code')
+    # Get player object
+    player_obj = playerData.get_player_obj(current_leader)
+    # Add won card to player object
+    player_obj.cards_won.append(voting_round_obj.card_data)
+    # Add won card back to the
+    playerData.update_cards_won(player_obj)
+
+    return Response(json.dumps(json_ret), mimetype='application/json')
+
 # TODO - CHECK THAT TIMESTAMP FUNCTION WORKS WHEN A USER CASTS A VOTE
 # TODO - CHECK IF PLAYERS ARE ACTIVE IF NOT REMOVE THEM FROM THE GAME (TIMESTAMP THEIR LAST VOTE?)
 # TODO - FIGURE OUT WAY TO ALERT USER WHO HAS WON THE CARD THAT THEY DID WIN (MODAL?)
