@@ -71,7 +71,7 @@ def load_players(game_code):
     log('Num Games: ' + str(len(iterable)))
     for x in iterable:
         new_game = game_from_entity(x)
-        print(new_game.players)
+        #print(new_game.players)
         return_list.append(new_game.players)
     return return_list
 
@@ -149,3 +149,31 @@ def get_game_object(game_code):
         return new_game
     log('No game found for ' + game_code)
     return None
+
+
+def check_card_indexes_used(game_code, index):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    return_list = []
+    for x in iterable:
+        new_game = game_from_entity(x)
+        return_list.append(new_game.cards_used)
+        if return_list.contains(index):
+            return False
+        return True
+
+
+def check_all_cards_used(game_code, index_size):
+    client = get_client()
+    query = client.query(kind='Game')
+    query.add_filter('Game Code', '=', game_code)
+    iterable = list(query.fetch())
+    return_list = []
+    for x in iterable:
+        new_game = game_from_entity(x)
+        return_list.append(new_game.cards_used)
+        if len(return_list) == index_size:
+            return False
+        return True

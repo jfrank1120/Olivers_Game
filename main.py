@@ -117,10 +117,20 @@ def get_new_card():
     log('GENERATING NEW CARD')
     with open('Card_Data.txt', 'r') as card_data:
         card_strings = card_data.read().splitlines()
-    index = randint(0, len(card_strings) - 1)
+    # Case where all cards have been used
+    if gameData.check_all_cards_used(session['game_code'], len(card_strings) - 1):
+        json_resp = {
+            'current_card': 'All Cards Have Been Used, Please create a new game to restart'
+        }
+        return Response(json.dumps(json_resp), mimetype='application/json')
+
+    while True:
+        index = randint(0, len(card_strings) - 1)
+        if gameData.check_card_indexes_used(session['game_code'], index):
+            break
+
     selected_card = card_strings[index]
     log('selected card: ' + selected_card)
-
     # All the database actions
     gameData.add_card_to_used(session['game_code'], index)
     gameData.set_current_card(session['game_code'], selected_card)
