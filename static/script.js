@@ -191,7 +191,7 @@ function update_UI_callback(session_data) {
     } catch (err) {
         console.log('No new winner to report')
     }
-    
+
 }
 
 
