@@ -16,6 +16,11 @@ import votingRoundData
 app = flask.Flask(__name__)
 app.secret_key = b'@U\xb0\xadf\x92f\xe8\x10\xee\xdf\x81O\x92\xb7\xe5\xca\x10rE&=\xd0\x7f'
 
+global winner_crowned
+global latest_winner
+global number_of_sips
+global number_of_votes
+
 
 # Simple logging function for server output
 def log(msg):
@@ -137,6 +142,9 @@ def get_new_card():
     new_voting_round = VotingRound(session['game_code'], selected_card)
     new_voting_round.num_votes_needed = votingRoundData.get_num_players(new_voting_round)
     votingRoundData.add_voting_round(new_voting_round)
+    # Reset the global variables
+    reset_globals()
+
     json_resp = {
         'current_card': selected_card
     }
@@ -173,12 +181,24 @@ def get_current_card():
 def get_ui_info():
     players_list = gameData.load_players(session['game_code'])
     current_card = gameData.get_current_card(session['game_code'])
-    ui_info = {
-        'username': session['username'],
-        'game_code': session['game_code'],
-        'players': players_list,
-        'current_card': current_card,
-    }
+    global winner_crowned
+    if winner_crowned is True:
+        ui_info = {
+            'username': session['username'],
+            'game_code': session['game_code'],
+            'players': players_list,
+            'current_card': current_card,
+            'round_winner': latest_winner,
+            'num_votes': number_of_votes,
+            'num_sips': number_of_sips
+        }
+    else:
+        ui_info = {
+            'username': session['username'],
+            'game_code': session['game_code'],
+            'players': players_list,
+            'current_card': current_card,
+        }
     return Response(json.dumps(ui_info), mimetype='application/json')
 
 
@@ -217,6 +237,7 @@ def count_votes():
             highest_votes = voting_round_obj.count(x)
             current_leader = str(x)
     num_sips = randint(0, 5)
+    set_globals(current_leader, num_sips, highest_votes)
     json_ret = {
         "winner": current_leader,
         "num_votes": highest_votes,
@@ -231,6 +252,31 @@ def count_votes():
     playerData.update_cards_won(player_obj)
 
     return Response(json.dumps(json_ret), mimetype='application/json')
+
+
+# Set the globals so that the front-end can show the user a modal
+def set_globals(current_leader, num_sips, highest_votes):
+    global latest_winner
+    latest_winner = current_leader
+    global number_of_sips
+    number_of_sips = num_sips
+    global number_of_votes
+    number_of_votes = highest_votes
+    global winner_crowned
+    winner_crowned = True
+
+
+# Reset all of the global variables for showing a modal to the player
+def reset_globals():
+    global latest_winner
+    latest_winner = ''
+    global number_of_sips
+    number_of_sips = 0
+    global number_of_votes
+    number_of_votes = 0
+    global winner_crowned
+    winner_crowned = False
+
 
 # TODO - CHECK THAT TIMESTAMP FUNCTION WORKS WHEN A USER CASTS A VOTE
 # TODO - CHECK IF PLAYERS ARE ACTIVE IF NOT REMOVE THEM FROM THE GAME (TIMESTAMP THEIR LAST VOTE?)

@@ -182,7 +182,19 @@ function update_UI_callback(session_data) {
     update_card(session_data['current_card']);
     // Update the number of players
     populate_player_area_loop(session_data['players']);
+    // Check if the round has ended and if so get data about winner
+    try {
+        var round_winner = session_data['round_winner'];
+        var num_votes = session_data['num_votes'];
+        var num_sips = session_data['num_sips'];
+        show_winner(session_data)
+    } catch (err) {
+        console.log('No new winner to report')
+    }
+    
 }
+
+
 
 function join_game() {
     var game_code = document.getElementById('game_code').value;
@@ -270,8 +282,9 @@ function tally_votes() {
 function show_winner(data) {
     console.log(data);
     // Function to show the winner modal
-     $('#modal_tinner').text(player_name + " Won!");
+     $('#modal_winner').text(data['round_winner'] + " Won!");
      $('#modal_data').append("<h4> TAKE " + data['num_sips'] +" SIP(S)!! </h4>")
+     $('#modal_vote_num').append(""<h3> THEY HAD" + data['num_votes'] + "votes! </h3>")
      $('#winnerModal').modal('show');
 }
 // TODO - WRITE A FUNCTION TO CONTINUALLY UPDATE THE UI SO THAT PLAYERS SEE VOTES, NEW CARDS, ETC
